@@ -1,98 +1,139 @@
-<div align="center" style="border-bottom: none">
-    <a href="https://kottster.app"><picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://kottster.app/_next/image?url=%2Flogoline-white.png&w=256&q=75">
-        <source media="(prefers-color-scheme: light)" srcset="https://kottster.app/_next/image?url=%2Flogoline.png&w=256&q=75">
-        <img alt="Kottster logo" src="https://kottster.app/_next/image?url=%2Flogoline.png&w=256&q=75" width="140" />
-    </picture></a>
-</div>
+# Kottster App
 
-<div align="center">
+This template provides two methods to get started with Kottster:
+- **Option 1:** Using Docker Compose (recommended for most users)
+- **Option 2:** Using Docker commands directly
 
-# Instant admin panel for your app
+Both the `Dockerfile` and `docker-compose.yml` are already included in the repository for your convenience.
 
-Get a custom Node.js admin panel. Create pages to **view and manage data in your database tables**, <br />
-**compose dashboards**, or build fully custom pages. Secure, self-hosted, and easy to set up.
-  
-</div>
+## Option 1: Using Docker Compose
 
-<div align="center">
-  
-![NPM Downloads](https://img.shields.io/npm/dm/%40kottster%2Fcli)
-[![@kottster/server.svg](https://img.shields.io/npm/v/@kottster/server.svg)](https://www.npmjs.com/package/@kottster/server)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![GitHub last commit](https://img.shields.io/github/last-commit/kottster/kottster)
-
-</div>
-
-<div align="center">
-
-[Get Started](https://kottster.app/docs/) • [Live Demo](https://demo.kottster.app) • [Our Website](https://kottster.app) • [Docs](https://kottster.app/docs/)
-
-[![Kottster](/assets/intro-5.png)](https://youtu.be/JBpLVgkoj-k?si=GJ3IIBmzlgrCLKWs)
-
-</div>
-
----
-
-## Getting started
-
-#### To create a new project, run:
+### 1. Clone the repository
 
 ```bash
-npx @kottster/cli@latest new
+git clone https://github.com/kottster/kottster-template-js my-kottster-app
+
+cd my-kottster-app
 ```
 
-> Make sure you have **Node.js (v20 or above)** installed on your system.
-
-Alternatively, you can use Docker to run Kottster. For more details, check out the [Docker Quickstart](https://kottster.app/docs/quickstart-docker).
-
-## Next steps
-
-#### 1. Inside your project, run the app locally:
+### 2. Start the container
 
 ```bash
-npm run dev
+docker-compose up -d
 ```
 
-This will run the app locally in development mode. You can access it at [http://localhost:5480](http://localhost:5480).
+> **IMPORTANT:** The `-d` flag is crucial as it runs the container in detached mode (background). Without this flag, your terminal will be locked to the container's output, and you won't be able to run the next command to start the application.
 
-#### 2. Create an account.
+### 3. Start the application
 
-After running the project, you'll need to log in to your account or create a new one.
+**Development mode:**
+```bash
+docker exec -it my-kottster-container /dev.sh
+```
 
-#### 3. Connect the app to your database.
+**Production mode:**
+```bash
+docker exec -it my-kottster-container /prod.sh
+```
 
-#### 4. Start building your app:
+### 4. Container Management
 
-- Add pages for viewing and managing data in your database table.
-- Or, build fully custom pages from scratch (dashboards, charts, forms, etc.).
+**Stop the container:**
+```bash
+docker-compose down
+```
 
-#### 5. [Deploy your app](https://kottster.app/docs/deploying) when it's ready.
+**View container logs:**
+```bash
+docker-compose logs
+```
 
-## Resources
+## Option 2: Using Docker Commands
 
-- [Docs](https://kottster.app/docs/)
-  - [Quickstart](https://kottster.app/docs/)
-  - [Quickstart with Docker](https://kottster.app/docs/quickstart-docker)
-  - [Tutorial (5 min)](https://kottster.app/docs/tutorial/)
-  - [Deploying](https://kottster.app/docs/deploying)
- 
-## Contribute
+### 1. Clone the repository
 
-We welcome feedback and contributions!
+```bash
+git clone https://github.com/kottster/kottster-template-js my-kottster-app
 
-- 🐛 [Report a bug](https://github.com/kottster/kottster/issues/new?template=bug_report.md)
-- 💡 [Suggest a feature](https://github.com/kottster/kottster/issues/new?template=feature_request.md)
-- 📚 [Improve the docs](https://github.com/kottster/kottster/issues/new?template=docs_improvement.md)
+cd my-kottster-app
+```
 
-See [CONTRIBUTING.md](https://github.com/kottster/kottster/blob/main/CONTRIBUTING.md) for guidelines.
+### 2. Build the Docker image
 
-## Need Help?
+```bash
+docker build -t my-kottster-app .
+```
 
-- 💬 [Join our Discord](https://discord.com/invite/Qce9uUqK98)
-- 📬 [Contact us](https://kottster.app/contact-us)
-- ✉️ [team@kottster.app](mailto:team@kottster.app)
+### 3. Run the container
 
-## License
+```bash
+docker run -d --name my-kottster-container \
+  -p 5480:5480 -p 5481:5481 \
+  -v $(pwd):/app \
+  -v /app/node_modules \
+  my-kottster-app
+```
 
-Kottster is licensed under the terms of [Apache License 2.0](https://github.com/kottster/kottster/blob/main/LICENSE).
+> Here's what each flag does:
+> - `-d` - Run the container in the background
+> - `--name my-kottster-container` - Assign a name to the container
+> - `-p 5480:5480 -p 5481:5481` - Map the container ports to the host machine
+> - `-v $(pwd):/app` - Mount the current directory to the `/app` directory in the container
+> - `-v /app/node_modules` - Mount the `node_modules` directory to the container
+
+### 4. Start the application
+
+**Development mode:**
+```bash
+docker exec -it my-kottster-container /dev.sh
+```
+
+**Production mode:**
+```bash
+docker exec -it my-kottster-container /prod.sh
+```
+
+### 5. Container Management
+
+**Stop the container:**
+```bash
+docker stop my-kottster-container
+```
+
+**Remove the container:**
+```bash
+docker rm my-kottster-container
+```
+
+**View container logs:**
+```bash
+docker logs my-kottster-container
+```
+
+## Development
+
+The container is configured to synchronize your local codebase with the container. Any changes made to your local files will be immediately reflected in the running application.
+
+## Configuration
+
+### Customizing Ports
+
+#### With Docker Compose:
+Edit the `ports` section in your `docker-compose.yml` file:
+
+```yaml
+ports:
+  - "<host-port>:5480"
+  - "<host-port>:5481"
+```
+
+#### With Docker commands:
+Modify the `-p` flags in the Docker run command:
+
+```bash
+docker run -d --name my-kottster-container \
+  -p <host-port>:5480 -p <host-port>:5481 \
+  -v $(pwd):/app \
+  -v /app/node_modules \
+  my-kottster-app
+```

@@ -1,1 +1,0 @@
-export const ROOT_USER_ID = '__KOTTSTER_APP_ROOT_USER__';

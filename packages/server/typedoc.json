@@ -1,4 +1,0 @@
-{
-  "entryPoints": ["lib/apiReference.ts"],
-  "disableSources": true
-}
